@@ -1,7 +1,26 @@
 import { useState, useEffect, useContext } from "react";
-import { provider } from "../ABI";
+import { ABI } from "../ABI";
 import { ErrorContext } from "../App";
+import { ethers } from "ethers";
 
+export const contractAddress: string =
+	"0xCba263Afe0ab77Ffd105cEFb4eDad9fEA77e7Eb4";
+
+export let provider = window.ethereum
+	? new ethers.providers.Web3Provider(window.ethereum)
+	: new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_PROVIDER);
+
+export let signer: any =
+	window.ethereum && window.ethereum.selectedAddress
+		? provider.getSigner()
+		: undefined;
+
+export let contract = new ethers.Contract(
+	contractAddress,
+	ABI,
+	signer ?? provider
+);
+/*eslint-disable*/
 export default function Navbar() {
 	const { setShowError } = useContext(ErrorContext);
 	const [buttonText, setButtonText] = useState<string>("Connect wallet");
@@ -40,6 +59,8 @@ export default function Navbar() {
 	const persistRender = async () => {
 		const accounts = await provider.listAccounts();
 		if (accounts.length > 0) {
+			signer = provider.getSigner();
+			contract = contract.connect(signer);
 			setButtonText("Connected");
 
 			connectNetwork();
@@ -70,7 +91,7 @@ export default function Navbar() {
 				{buttonText}
 			</button>
 			<div className="flex flex-col justify-center items-center text-xl">
-				<div className="mt-52 ml-10 mr-10 text-center">
+				<div className="mt-32 ml-10 mr-10 text-center">
 					Predict the price of Eth to be greater or lower than the current price
 					20 seconds ahead of time!
 				</div>

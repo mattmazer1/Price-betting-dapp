@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 const pricesWs = new WebSocket("wss://ws.coincap.io/prices?assets=ethereum");
-
+/*eslint-disable*/
 export default function Price() {
 	const [ethPrice, setEthPrice] = useState<any>([]);
 	pricesWs.onmessage = function (msg) {

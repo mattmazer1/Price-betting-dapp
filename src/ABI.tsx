@@ -1,5 +1,3 @@
-import { ethers } from "ethers";
-
 export const ABI = [
 	{
 		inputs: [],
@@ -144,14 +142,3 @@ export const ABI = [
 		type: "function",
 	},
 ];
-
-export const contractAddress: string =
-	"0xCba263Afe0ab77Ffd105cEFb4eDad9fEA77e7Eb4";
-
-export let provider = window.ethereum
-	? new ethers.providers.Web3Provider(window.ethereum)
-	: new ethers.providers.JsonRpcProvider(process.env.REACT_APP_RPC_PROVIDER);
-
-export const signer = provider.getSigner();
-
-export const contract = new ethers.Contract(contractAddress, ABI, signer);
